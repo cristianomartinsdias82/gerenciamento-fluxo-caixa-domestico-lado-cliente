@@ -2,23 +2,20 @@ import './App.css'
 
 function App() {
   return (
-    <>
+    <div className="layout">
       <header>
-
+        Header
       </header>
+      <nav role="nav">
+        Nav menu
+      </nav>
       <main>
-        <nav>
-        
-        </nav>
-        <section>
-
-        </section>
+        App content
       </main>
       <footer>
-
-      </footer>      
-    </>
-  )
+        Footer
+      </footer>
+  </div>)
 }
 
 export default App

@@ -1,0 +1,48 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    box-sizing: border-box;
+}
+
+@media screen and (min-width: 768px) {
+  .layout {
+    width: 100%;
+    display: grid;
+
+    column-gap: 0;
+    row-gap: 0;
+
+    header {
+      grid-area: header;
+      min-height: 90px;
+      border-bottom: 1px solid #555;
+      width: 100vw;
+      padding:0;
+      margin:0;
+    }
+ 
+    main {
+      grid-area: main;
+      min-height: 790px;
+    }
+    nav {
+      grid-area: nav;
+      height: 100%;
+      border-right: 1px solid #555;
+    }
+    footer {
+      grid-area: footer;
+      border-top: 1px solid #555;
+      text-align: center;
+      padding: 1rem;
+    }
+
+    grid-template-columns: minmax(auto, 240px) 1fr;
+    grid-template-rows: auto;
+    grid-template-areas:
+      "header header"
+      "nav main"
+      "footer footer";
+  }
+}
