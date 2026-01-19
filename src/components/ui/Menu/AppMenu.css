@@ -1,0 +1,17 @@
+.app-menu ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.app-menu .sub-menu li {
+  padding-left: 20px;
+}
+
+.app-menu a:link,
+.app-menu a:visited,
+.app-menu a:hover,
+.app-menu a:active {
+  text-decoration: underline;
+  color: inherit;
+}
