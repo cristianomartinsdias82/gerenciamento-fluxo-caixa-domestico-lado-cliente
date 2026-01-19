@@ -1,0 +1,24 @@
+.people-listing-container {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding-top: 1rem;
+}
+
+.people-listing,
+.people-listing tr,
+.people-listing td,
+.people-listing th {
+    border: 1px solid #555;
+}
+
+.people-listing td,
+.people-listing th {
+    padding: 0.4rem;
+}
+
+.people-listing tfoot td {
+    font-weight: bold;
+    text-align: right;}

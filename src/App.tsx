@@ -1,16 +1,19 @@
 import { useState } from 'react';
 import './App.css'
-import AppMenu from './components/ui/Menu/AppMenu'
+import AppMenu from './layout/menu/AppMenu';
+import PeopleListing from './features/people/people-listing/components/PeopleListing';
 
-const PeopleMenuItem = 'people';
-const CategoriesMenuItem = 'categories';
+const PeopleListingFeature = 'people-listing';
+const PersonRegistrationFeature = 'person-registration';
+const CategoriesFeature = 'categories';
 const TransactionsenuItem = 'transactions';
-const PerPersonTotalReportMenuItem = 'per-person-totals-report';
-const PerCategoryTotalReportMenuItem = 'per-category-totals-report';
+const PerPersonTotalReportFeature = 'per-person-totals-report';
+const PerCategoryTotalReportFeature = 'per-category-totals-report';
 
 function App() {
 
-  const [activeMenuItem, setActiveMenuItem] = useState<string | null>(null);
+  const [activeFeature, setActiveFeature] = useState<string>(PeopleListingFeature);
+  const peopleListingSelected = activeFeature === PeopleListingFeature;
 
   return (
     <div className="layout">
@@ -19,14 +22,14 @@ function App() {
       </header>
       <nav role="nav">
         <AppMenu
-          onPeopleMenuItemClick={() => setActiveMenuItem(PeopleMenuItem)}
-          onCategoriesMenuItemClick={() => setActiveMenuItem(CategoriesMenuItem)}
-          onTransactionsMenuItemClick={() => setActiveMenuItem(TransactionsenuItem)}
-          onPerPersonTotalsMenuItemClick={() => setActiveMenuItem(PerPersonTotalReportMenuItem)}
-          onPerCategoryTotalsMenuItemClick={() => setActiveMenuItem(PerCategoryTotalReportMenuItem)} />
+          onPeopleListingFeatureClick={() => setActiveFeature(PeopleListingFeature)}
+          onCategoriesListingFeatureClick={() => setActiveFeature(CategoriesFeature)}
+          onTransactionsListingFeatureClick={() => setActiveFeature(TransactionsenuItem)}
+          onPerPersonTotalsReportFeatureClick={() => setActiveFeature(PerPersonTotalReportFeature)}
+          onPerCategoryTotalsReportFeatureClick={() => setActiveFeature(PerCategoryTotalReportFeature)} />
       </nav>
       <main>
-        Content
+        {peopleListingSelected && <PeopleListing onNewPersonClick={() => setActiveFeature(PersonRegistrationFeature)} />}
       </main>
       <footer>
         Developed by Cristiano Dias :)
@@ -34,4 +37,4 @@ function App() {
   </div>)
 }
 
-export default App
+export default App;
