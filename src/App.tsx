@@ -2,6 +2,7 @@ import { useState } from 'react';
 import './App.css'
 import AppMenu from './layout/menu/AppMenu';
 import PeopleListing from './features/people/people-listing/components/PeopleListing';
+import PersonRegistrationForm from './features/people/people-registration/components/PersonRegistrationForm';
 
 const PeopleListingFeature = 'people-listing';
 const PersonRegistrationFeature = 'person-registration';
@@ -13,7 +14,6 @@ const PerCategoryTotalReportFeature = 'per-category-totals-report';
 function App() {
 
   const [activeFeature, setActiveFeature] = useState<string>(PeopleListingFeature);
-  const peopleListingSelected = activeFeature === PeopleListingFeature;
 
   return (
     <div className="layout">
@@ -29,7 +29,12 @@ function App() {
           onPerCategoryTotalsReportFeatureClick={() => setActiveFeature(PerCategoryTotalReportFeature)} />
       </nav>
       <main>
-        {peopleListingSelected && <PeopleListing onNewPersonClick={() => setActiveFeature(PersonRegistrationFeature)} />}
+        {activeFeature === PeopleListingFeature &&
+        <PeopleListing onNewPersonClick={() => setActiveFeature(PersonRegistrationFeature)} />}
+        {activeFeature === PersonRegistrationFeature &&
+        <PersonRegistrationForm
+          onNewPersonRegistered={() => setActiveFeature(PeopleListingFeature)}
+          onCancelPersonRegistration={() => setActiveFeature(PeopleListingFeature)} />}
       </main>
       <footer>
         Developed by Cristiano Dias :)
