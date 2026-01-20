@@ -6,7 +6,7 @@ import type { PagedResult } from '../../../../common/models/results/paged-result
 import type { QueryParams } from '../../../../common/models/searching/query-params';
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
-const defaultPageSize = 1;
+const defaultPageSize = 10;
 type PeopleListingProps = {
     onNewPersonClick?: () => void;
 };
@@ -62,8 +62,7 @@ const PeopleListing = ({ onNewPersonClick }: PeopleListingProps) => {
 
     const removePerson = async (id: string) => {
         try {
-            const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
-            const response = await fetch(
+                const response = await fetch(
                 `${apiBaseUrl}/people/${id}`,
                 { method : 'DELETE'});
 
