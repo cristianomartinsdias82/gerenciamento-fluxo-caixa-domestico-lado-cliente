@@ -1,0 +1,32 @@
+.report-container {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding-top: 1rem;
+}
+
+.report-listing-listing,
+.report-listing tr,
+.report-listing td,
+.report-listing th {
+    border: 1px solid #555;
+}
+
+.report-listing td,
+.report-listing th {
+    padding: 0.4rem;
+}
+
+.net-total-zero {
+    color: white;
+}
+
+.net-total-positive {
+    color: green;
+}
+
+.net-total-negative {
+    color: red;
+}

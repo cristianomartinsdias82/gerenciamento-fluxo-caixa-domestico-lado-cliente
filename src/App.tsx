@@ -3,6 +3,7 @@ import './App.css'
 import AppMenu from './layout/menu/AppMenu';
 import PeopleListing from './features/people/people-listing/components/PeopleListing';
 import PersonRegistrationForm from './features/people/people-registration/components/PersonRegistrationForm';
+import PerPersonTotalsReport from './features/reporting/per-person-totals-report/components/PerPersonTotalsReport';
 
 const PeopleListingFeature = 'people-listing';
 const PersonRegistrationFeature = 'person-registration';
@@ -35,6 +36,7 @@ function App() {
         <PersonRegistrationForm
           onNewPersonRegistered={() => setActiveFeature(PeopleListingFeature)}
           onCancelPersonRegistration={() => setActiveFeature(PeopleListingFeature)} />}
+        {activeFeature === PerPersonTotalReportFeature && <PerPersonTotalsReport />}
       </main>
       <footer>
         Developed by Cristiano Dias :)
