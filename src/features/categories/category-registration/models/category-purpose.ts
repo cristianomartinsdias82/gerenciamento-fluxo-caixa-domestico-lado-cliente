@@ -1,0 +1,1 @@
+export type CategoryPurpose = 'income' | 'expense' | 'both';

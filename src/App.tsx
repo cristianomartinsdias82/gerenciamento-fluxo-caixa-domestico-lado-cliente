@@ -3,12 +3,15 @@ import './App.css'
 import AppMenu from './layout/menu/AppMenu';
 import PeopleListing from './features/people/people-listing/components/PeopleListing';
 import PersonRegistrationForm from './features/people/people-registration/components/PersonRegistrationForm';
+
+import CategoryRegistrationForm from './features/categories/category-registration/components/CategoryRegistrationForm';
 import PerCategoryTotalsReport from './features/reporting/per-category-totals-report/components/PerCategoryTotalsReport';
 import PerPersonTotalsReport from './features/reporting/per-person-totals-report/components/PerPersonTotalsReport';
 
 const PeopleListingFeature = 'people-listing';
 const PersonRegistrationFeature = 'person-registration';
-const CategoriesFeature = 'categories';
+const CategoriesListingFeature = 'categories';
+const CategoriesRegistrationFeature = 'categories-registration';
 const TransactionsenuItem = 'transactions';
 const PerPersonTotalReportFeature = 'per-person-totals-report';
 const PerCategoryTotalReportFeature = 'per-category-totals-report';
@@ -25,7 +28,7 @@ function App() {
       <nav role="nav">
         <AppMenu
           onPeopleListingFeatureClick={() => setActiveFeature(PeopleListingFeature)}
-          onCategoriesListingFeatureClick={() => setActiveFeature(CategoriesFeature)}
+          onCategoriesListingFeatureClick={() => setActiveFeature(CategoriesListingFeature)}
           onTransactionsListingFeatureClick={() => setActiveFeature(TransactionsenuItem)}
           onPerPersonTotalsReportFeatureClick={() => setActiveFeature(PerPersonTotalReportFeature)}
           onPerCategoryTotalsReportFeatureClick={() => setActiveFeature(PerCategoryTotalReportFeature)} />
@@ -33,11 +36,21 @@ function App() {
       <main>
         {activeFeature === PeopleListingFeature &&
         <PeopleListing onNewPersonClick={() => setActiveFeature(PersonRegistrationFeature)} />}
+
         {activeFeature === PersonRegistrationFeature &&
         <PersonRegistrationForm
           onNewPersonRegistered={() => setActiveFeature(PeopleListingFeature)}
           onCancelPersonRegistration={() => setActiveFeature(PeopleListingFeature)} />}
+
+        {activeFeature === CategoriesRegistrationFeature &&
+        <CategoryRegistrationForm
+          onNewCategoryRegistered={() => setActiveFeature(CategoriesListingFeature)}
+          onCancelCategoryRegistration={() => setActiveFeature(CategoriesListingFeature)} />}
+
+        {activeFeature === PerCategoryTotalReportFeature && <PerCategoryTotalsReport />}
+
         {activeFeature === PerPersonTotalReportFeature && <PerPersonTotalsReport />}
+
         {activeFeature === PerCategoryTotalReportFeature && <PerCategoryTotalsReport />}
       </main>
       <footer>
