@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const PersonRegistrationFormSchema = z.object({
   fullName: z.string()
-              .min(10, { message: "(*) Full name is required" })
+              .min(10, { message: "(*) Full name must be at least 10 characters long." })
               .max(200, { message: "(*) Full name must be no more than 200 characters long." }),
   age: z.coerce
         .number({message: "(*) Age must be an integer."})
