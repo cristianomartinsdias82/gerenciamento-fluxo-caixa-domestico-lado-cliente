@@ -1,9 +1,9 @@
 export type QueryParams = 
 {
-	sortBy: string;
-	sortDirection: string;
 	pageNumber: number;
 	pageSize: number;
+	sortBy?: string;
+	sortDirection?: string;
     searchTerm?: string;
     fieldToSearchBy?: string;
 };

@@ -1,47 +1,61 @@
-import { useEffect, useState } from 'react';
-import './PeopleListing.css'
+import { useEffect, useState, type ChangeEvent } from 'react';
+import './PeopleListing.css';
+import Pagination from '../../../../common/components/pagination/Pagination';
 import type { Person } from '../models/person';
-import type { PagedResult } from '../../../../common/results/paged-result';
-import type { QueryParams } from '../../../../common/searching/query-params';
+import type { PagedResult } from '../../../../common/models/results/paged-result';
+import type { QueryParams } from '../../../../common/models/searching/query-params';
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+const defaultPageSize = 1;
 type PeopleListingProps = {
     onNewPersonClick?: () => void;
 };
 
-const PeopleListing = ({onNewPersonClick}:PeopleListingProps) => {
+const PeopleListing = ({ onNewPersonClick }: PeopleListingProps) => {
 
-    const [peopleList, setPeopleList] = useState<Person[]>([]);
     const [pagedResult, setPagedResult] = useState<PagedResult<Person> | null>(null);
-    const [queryParams, setQueryParams] = useState<QueryParams | null>(null);
+    const [queryParams, setQueryParams] = useState<QueryParams>({ pageNumber: 1, pageSize: defaultPageSize });
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<Error | null>(null);
+    const [searchInput, setSearchInput] = useState<string>('');
+    const hasPagination = (pagedResult?.pageCount ?? 0) > 1;
 
     useEffect(() => {
 
         const abortController = new AbortController();
 
-        const fetchPeopleList = async () => {            
+        const fetchPeopleList = async () => {
 
             try {
-                const response = await fetch(`${apiBaseUrl}/people`, { signal: abortController.signal });
+                const response = await fetch(
+                    `${apiBaseUrl}/people?pageNumber=${queryParams.pageNumber}&pageSize=${queryParams.pageSize}&searchTerm=${encodeURIComponent(searchInput)}`,
+                    { signal: abortController.signal });
+                
                 const pagedResult = await response.json() as PagedResult<Person>;
 
                 setPagedResult(pagedResult);
-                setPeopleList(pagedResult.items);
-                setQueryParams(pagedResult.queryParams);
             } catch (error: unknown) {
                 if (error.name === 'AbortError') return;
 
+                setError(error as Error);
                 console.error('Error fetching people list:', error);
+            } finally {
+                setLoading(false);
             }
         }
 
-        fetchPeopleList();
+        const searchTID = setTimeout(() => {
+            fetchPeopleList();
+        }, 700);
 
-        return () => abortController.abort();
-    }, [queryParams, pagedResult]);
+        return () => {
+            clearTimeout(searchTID);
+            abortController.abort();
+        };
+    }, [queryParams, searchInput]);
 
     const handleRemove = async (person: Person) => {
-        if (!window.confirm(`Are you sure you want to remove ${person.fullName}? (All his/her income/expenses will be deleted as well.)`)) return;
+        if (!window.confirm(`Are you sure you want to remove '${person.fullName}'? (All his/her income and expenses will be deleted as well!)`)) return;
 
         await removePerson(person.id);
     }
@@ -53,17 +67,31 @@ const PeopleListing = ({onNewPersonClick}:PeopleListingProps) => {
                 `${apiBaseUrl}/people/${id}`,
                 { method : 'DELETE'});
 
-            if (response.ok) {
-                setPeopleList(people => people.filter(p => p.id !== id));
-            }
+            if (response.ok) setQueryParams({...queryParams, pageNumber: 1});
+            else setError(new Error(response.statusText));
         } catch (error) {
             console.error('Error removing person:', error);
         }
     }
 
+    const handlePageChange = (pageNumber: number) => {
+        setQueryParams({...queryParams, pageNumber});
+    }
+
+    const handleSearchChange = (e: ChangeEvent) => {
+        const val = (e.target as HTMLInputElement).value;
+        setSearchInput(val);
+        setQueryParams({...queryParams, searchTerm: val});
+    }
+
+    if (loading) return <div>Loading. Please wait...</div>;
+    if (error) return <div>Error: {error.message}</div>;
+
     return (
         <div className="people-listing-container">
             <button type="button" onClick={() => { onNewPersonClick?.() }}>New person</button>
+            <input type="text" placeholder="Search by name" value={searchInput} onChange={handleSearchChange} />
+            {(pagedResult && pagedResult.itemCount > 0) &&
             <table className="people-listing">
                 <thead>
                     <tr>
@@ -73,21 +101,27 @@ const PeopleListing = ({onNewPersonClick}:PeopleListingProps) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {peopleList.map(person => (
-                        <tr key={person.id}>
-                            <td>{person.fullName}</td>
-                            <td>{person.age}</td>
-                            <td><button type="button" onClick={() => handleRemove(person)}>Remove</button></td>
+                    {pagedResult.items.map(it => (
+                        <tr key={it.id}>
+                            <td>{it.fullName}</td>
+                            <td>{it.age}</td>
+                            <td><button type="button" onClick={() => handleRemove(it)}>Remove</button></td>
                         </tr>
                     ))}
                 </tbody>
                 <tfoot>
                     <tr>
-                        <td colSpan={3}>Count: {peopleList.length}</td>
+                        <td colSpan={3}>Count: {pagedResult.items.length}</td>
                     </tr>
                 </tfoot>
-            </table>
+            </table>}
+            {hasPagination &&
+             <Pagination paginationParams={{
+                         pageNumber: pagedResult!.queryParams.pageNumber,
+                         pageSize: pagedResult!.queryParams.pageSize,
+                         totalItems: pagedResult!.itemCount}}
+                         onPageChange={handlePageChange} />}
         </div>
-    )
+    );
 }
 export default PeopleListing;
