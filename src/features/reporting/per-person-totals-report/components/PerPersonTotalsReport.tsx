@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import './PerPersonTotalsReport.css';
-import type { PerPersonTotalsReport } from '../models/PerPersonTotalReport';
+import type { PerPersonTotalsReport } from '../models/PerPersonTotalsReport';
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 
