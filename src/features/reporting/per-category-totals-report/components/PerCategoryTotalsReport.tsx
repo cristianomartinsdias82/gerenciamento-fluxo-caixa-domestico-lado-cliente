@@ -50,7 +50,7 @@ const PerCategoryTotalsReport = () => {
         <div className="report-container">
             {reportData &&
             <>
-                <h2>Per Person Totals</h2>
+                <h2>Per Category Totals</h2>
                 <table className="report-listing">
                     <thead>
                         <tr>
