@@ -1,0 +1,18 @@
+.transaction-registration-form-container {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.transaction-registration-form-container .buttons {
+    display: flex;
+    align-items: space-between;
+    gap: 1rem
+}
+
+.transaction-registration-form-container textarea {
+    resize: none;
+}

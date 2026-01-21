@@ -9,6 +9,7 @@ import PerCategoryTotalsReport from './features/reporting/per-category-totals-re
 import PerPersonTotalsReport from './features/reporting/per-person-totals-report/components/PerPersonTotalsReport';
 import CategoriesListing from './features/categories/category-listing/components/CategoriesListing';
 import TransactionsListing from './features/transactions/transactions-listing/components/TransactionsListing';
+import TransactionRegistrationForm from './features/transactions/transaction-registration/components/TransactionRegistrationForm';
 
 const PeopleListingFeature = 'people-listing';
 const PersonRegistrationFeature = 'person-registration';
@@ -53,6 +54,10 @@ function App() {
 
         {activeFeature === TransactionsListingFeature &&
         <TransactionsListing onNewTransactionClick={() => setActiveFeature(TransactionRegistrationFeature)} />}
+        {activeFeature === TransactionRegistrationFeature &&
+        <TransactionRegistrationForm
+          onNewTransactionRegistered={() => setActiveFeature(TransactionsListingFeature)}
+          onCancelTransactionRegistration={() => setActiveFeature(TransactionsListingFeature)} />}
 
         {activeFeature === PerCategoryTotalReportFeature &&
         <PerCategoryTotalsReport />}
