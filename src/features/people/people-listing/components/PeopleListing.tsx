@@ -74,6 +74,7 @@ const PeopleListing = ({ onNewPersonClick }: PeopleListingProps) => {
     }
 
     const handlePageChange = (pageNumber: number) => {
+        setLoading(true);
         setQueryParams({...queryParams, pageNumber});
     }
 

@@ -74,6 +74,7 @@ const CategoriesListing = ({ onNewCategoryClick }: CategoriesListingProps) => {
     }
 
     const handlePageChange = (pageNumber: number) => {
+        setLoading(true);
         setQueryParams({...queryParams, pageNumber});
     }
 

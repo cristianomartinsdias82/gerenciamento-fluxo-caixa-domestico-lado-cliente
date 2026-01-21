@@ -21,10 +21,10 @@ const TransactionsListing = ({ onNewTransactionClick }: TransactionsListingProps
 
     useEffect(() => {
 
-        const abortController = new AbortController();
+        const abortController = new AbortController();        
 
         const fetchTransactionsList = async () => {
-
+            
             try {
                 const response = await fetch(
                     `${apiBaseUrl}/people/transactions?pageNumber=${queryParams.pageNumber}&pageSize=${queryParams.pageSize}`,
@@ -54,6 +54,7 @@ const TransactionsListing = ({ onNewTransactionClick }: TransactionsListingProps
     }, [queryParams]);
 
     const handlePageChange = (pageNumber: number) => {
+        setLoading(true);
         setQueryParams({...queryParams, pageNumber});
     }
 
