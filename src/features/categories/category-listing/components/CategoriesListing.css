@@ -1,0 +1,24 @@
+.categories-listing-container {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding-top: 1rem;
+}
+
+.categories-listing,
+.categories-listing tr,
+.categories-listing td,
+.categories-listing th {
+    border: 1px solid #555;
+}
+
+.categories-listing td,
+.categories-listing th {
+    padding: 0.4rem;
+}
+
+.categories-listing tfoot td {
+    font-weight: bold;
+    text-align: right;}

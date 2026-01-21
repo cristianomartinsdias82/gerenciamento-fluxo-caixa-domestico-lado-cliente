@@ -7,6 +7,7 @@ import PersonRegistrationForm from './features/people/people-registration/compon
 import CategoryRegistrationForm from './features/categories/category-registration/components/CategoryRegistrationForm';
 import PerCategoryTotalsReport from './features/reporting/per-category-totals-report/components/PerCategoryTotalsReport';
 import PerPersonTotalsReport from './features/reporting/per-person-totals-report/components/PerPersonTotalsReport';
+import CategoriesListing from './features/categories/category-listing/components/CategoriesListing';
 
 const PeopleListingFeature = 'people-listing';
 const PersonRegistrationFeature = 'person-registration';
@@ -36,22 +37,24 @@ function App() {
       <main>
         {activeFeature === PeopleListingFeature &&
         <PeopleListing onNewPersonClick={() => setActiveFeature(PersonRegistrationFeature)} />}
-
         {activeFeature === PersonRegistrationFeature &&
         <PersonRegistrationForm
           onNewPersonRegistered={() => setActiveFeature(PeopleListingFeature)}
           onCancelPersonRegistration={() => setActiveFeature(PeopleListingFeature)} />}
 
+        {activeFeature === CategoriesListingFeature &&
+        <CategoriesListing onNewCategoryClick={() => setActiveFeature(CategoriesRegistrationFeature)} />}
         {activeFeature === CategoriesRegistrationFeature &&
         <CategoryRegistrationForm
           onNewCategoryRegistered={() => setActiveFeature(CategoriesListingFeature)}
           onCancelCategoryRegistration={() => setActiveFeature(CategoriesListingFeature)} />}
 
-        {activeFeature === PerCategoryTotalReportFeature && <PerCategoryTotalsReport />}
-
-        {activeFeature === PerPersonTotalReportFeature && <PerPersonTotalsReport />}
-
-        {activeFeature === PerCategoryTotalReportFeature && <PerCategoryTotalsReport />}
+        {activeFeature === PerCategoryTotalReportFeature &&
+        <PerCategoryTotalsReport />}
+        {activeFeature === PerPersonTotalReportFeature &&
+        <PerPersonTotalsReport />}
+        {activeFeature === PerCategoryTotalReportFeature &&
+        <PerCategoryTotalsReport />}
       </main>
       <footer>
         Developed by Cristiano Dias :)
