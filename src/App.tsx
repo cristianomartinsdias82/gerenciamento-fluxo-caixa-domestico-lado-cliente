@@ -8,12 +8,14 @@ import CategoryRegistrationForm from './features/categories/category-registratio
 import PerCategoryTotalsReport from './features/reporting/per-category-totals-report/components/PerCategoryTotalsReport';
 import PerPersonTotalsReport from './features/reporting/per-person-totals-report/components/PerPersonTotalsReport';
 import CategoriesListing from './features/categories/category-listing/components/CategoriesListing';
+import TransactionsListing from './features/transactions/transactions-listing/components/TransactionsListing';
 
 const PeopleListingFeature = 'people-listing';
 const PersonRegistrationFeature = 'person-registration';
 const CategoriesListingFeature = 'categories';
 const CategoriesRegistrationFeature = 'categories-registration';
-const TransactionsenuItem = 'transactions';
+const TransactionsListingFeature = 'transactions-listing';
+const TransactionRegistrationFeature = 'transaction-registration';
 const PerPersonTotalReportFeature = 'per-person-totals-report';
 const PerCategoryTotalReportFeature = 'per-category-totals-report';
 
@@ -30,7 +32,7 @@ function App() {
         <AppMenu
           onPeopleListingFeatureClick={() => setActiveFeature(PeopleListingFeature)}
           onCategoriesListingFeatureClick={() => setActiveFeature(CategoriesListingFeature)}
-          onTransactionsListingFeatureClick={() => setActiveFeature(TransactionsenuItem)}
+          onTransactionsListingFeatureClick={() => setActiveFeature(TransactionsListingFeature)}
           onPerPersonTotalsReportFeatureClick={() => setActiveFeature(PerPersonTotalReportFeature)}
           onPerCategoryTotalsReportFeatureClick={() => setActiveFeature(PerCategoryTotalReportFeature)} />
       </nav>
@@ -48,6 +50,9 @@ function App() {
         <CategoryRegistrationForm
           onNewCategoryRegistered={() => setActiveFeature(CategoriesListingFeature)}
           onCancelCategoryRegistration={() => setActiveFeature(CategoriesListingFeature)} />}
+
+        {activeFeature === TransactionsListingFeature &&
+        <TransactionsListing onNewTransactionClick={() => setActiveFeature(TransactionRegistrationFeature)} />}
 
         {activeFeature === PerCategoryTotalReportFeature &&
         <PerCategoryTotalsReport />}

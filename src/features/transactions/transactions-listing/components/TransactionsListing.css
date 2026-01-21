@@ -1,0 +1,24 @@
+.transactions-listing-container {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding-top: 1rem;
+}
+
+.transactions-listing,
+.transactions-listing tr,
+.transactions-listing td,
+.transactions-listing th {
+    border: 1px solid #555;
+}
+
+.transactions-listing td,
+.transactions-listing th {
+    padding: 0.4rem;
+}
+
+.transactions-listing tfoot td {
+    font-weight: bold;
+    text-align: right;}
