@@ -67,7 +67,6 @@ const TransactionsListing = ({ onNewTransactionClick }: TransactionsListingProps
             <table className="transactions-listing">
                 <thead>
                     <tr>
-                        <th>Date</th>
                         <th>Member</th>
                         <th>Category</th>
                         <th>Type</th>
@@ -77,7 +76,6 @@ const TransactionsListing = ({ onNewTransactionClick }: TransactionsListingProps
                 <tbody>
                     {pagedResult.items.map(it => (
                         <tr key={it.id}>
-                            <td>{it.date}</td>
                             <td>{it.person.fullName}</td>
                             <td>{it.category.name}</td>
                             <td>{it.type}</td>
