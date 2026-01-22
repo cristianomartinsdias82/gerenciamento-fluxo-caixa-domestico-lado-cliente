@@ -21,4 +21,4 @@ cd X:\caminho\para\projeto [ENTER]<br/>
 - No diretório, digite os seguintes comandos:<br/>
 npm install [ENTER]<br/>
 npm run dev [ENTER]<br/>
-(Com este último comando, um navegador web devera se abrir apontando para o endereço do servidor web)
+(Com este último comando, um navegador web deverá se abrir apontando para o endereço do servidor web)
