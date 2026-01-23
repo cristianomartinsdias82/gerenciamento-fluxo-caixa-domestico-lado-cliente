@@ -4,6 +4,6 @@ export type QueryParams =
 	pageSize: number;
 	sortBy?: string;
 	sortDirection?: string;
-    searchTerm?: string;
+    searchTerm?: string | null;
     fieldToSearchBy?: string;
 };
