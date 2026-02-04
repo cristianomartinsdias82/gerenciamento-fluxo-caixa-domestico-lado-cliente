@@ -8,6 +8,9 @@ type PeopleListingProps = {
     onNewPersonClick?: () => void;
 };
 
+//https://tigeroakes.com/posts/react-focus-on-render/
+const autoFocus = (element: HTMLInputElement) => element?.focus();
+
 const PeopleListing = ({ onNewPersonClick }: PeopleListingProps) => {
 
     const [searchInput, setSearchInput] = useState<string>('');
@@ -19,7 +22,9 @@ const PeopleListing = ({ onNewPersonClick }: PeopleListingProps) => {
         loading,
         error,
         removePerson
-    } = usePeopleListing({});
+    } = usePeopleListing();
+
+    const noItemsMessage = searchInput.length > 0 ? "The search returned no results." : "No people registered just yet!";
 
     const handleRemove = async (person: Person) => {
         if (!window.confirm(`Are you sure you want to remove '${person.fullName}'? (All his/her income and expenses will be deleted as well!)`)) return;
@@ -48,33 +53,33 @@ const PeopleListing = ({ onNewPersonClick }: PeopleListingProps) => {
     return (
         <div className="people-listing-container">
             <button type="button" onClick={() => { onNewPersonClick?.() }}>New person</button>
-            {!pagedResult || pagedResult.itemCount === 0 && <p>No people registered just yet!</p>}
+            <input type="text" ref={autoFocus} placeholder="Search by name" value={searchInput} onChange={handleSearchChange} />
+            {!pagedResult || pagedResult.itemCount === 0 && <p>{noItemsMessage}</p>}
             {(pagedResult && pagedResult.itemCount > 0) &&
-            <>
-            <input type="text" placeholder="Search by name" value={searchInput} onChange={handleSearchChange} />
-            <table className="people-listing">
-                <thead>
-                    <tr>
-                        <th>Full Name</th>
-                        <th>Age</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {pagedResult.items.map(it => (
-                        <tr key={it.id}>
-                            <td>{it.fullName}</td>
-                            <td>{it.age}</td>
-                            <td><button type="button" onClick={() => handleRemove(it)}>Remove</button></td>
+            <>                
+                <table className="people-listing">
+                    <thead>
+                        <tr>
+                            <th>Full Name</th>
+                            <th>Age</th>
+                            <th>Actions</th>
                         </tr>
-                    ))}
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td colSpan={3}>Count: {pagedResult.items.length}</td>
-                    </tr>
-                </tfoot>
-            </table>
+                    </thead>
+                    <tbody>
+                        {pagedResult.items.map(it => (
+                            <tr key={it.id}>
+                                <td>{it.fullName}</td>
+                                <td>{it.age}</td>
+                                <td><button type="button" onClick={() => handleRemove(it)}>Remove</button></td>
+                            </tr>
+                        ))}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colSpan={3}>Count: {pagedResult.items.length}</td>
+                        </tr>
+                    </tfoot>
+                </table>
             </>}
             {hasMultiplePages &&
              <Pagination paginationParams={{

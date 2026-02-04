@@ -3,13 +3,12 @@ import type { PagedResult } from '../../../../common/models/results/paged-result
 import type { Person } from '../models/person';
 import type { QueryParams } from '../../../../common/models/searching/query-params';
 
-export type usePeopleListDeps = {};
-
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 
 const mountQueryParams = (query: QueryParams) => `pageNumber=${query.pageNumber}&pageSize=${query.pageSize}&searchTerm=${encodeURIComponent(query.searchTerm ?? '')}`;
 
-const usePeopleListing = (deps?: usePeopleListDeps, onPostSearch?: () => void) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const usePeopleListing = (deps?: any) => {
 
     const [pagedResult, setPagedResult] = useState<PagedResult<Person> | undefined>(undefined);
     const [loading, setLoading] = useState(false);
@@ -33,7 +32,8 @@ const usePeopleListing = (deps?: usePeopleListDeps, onPostSearch?: () => void) =
                 setPagedResult(result);
                 setHasMultiplePages(result.pageCount > 1);
 
-            } catch (error: unknown) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            } catch (error: any) {
                 
                 if (error.name === 'AbortError') return;
 
@@ -42,7 +42,6 @@ const usePeopleListing = (deps?: usePeopleListDeps, onPostSearch?: () => void) =
             } finally {
 
                 setLoading(false);
-                onPostSearch?.();
 
             }
         }
@@ -63,7 +62,7 @@ const usePeopleListing = (deps?: usePeopleListDeps, onPostSearch?: () => void) =
             clearTimeout(searchTID);
             abortController.abort();
         }
-    }, [queryParams, deps?.onPostSearch]);
+    }, [queryParams, deps]);
 
     const removePerson = async (id: string) => {
 
