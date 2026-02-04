@@ -1,13 +1,9 @@
-import { /*useEffect, useState,*/ useState, type ChangeEvent } from 'react';
+import { useState, type ChangeEvent } from 'react';
 import './CategoriesListing.css';
 import Pagination from '../../../../common/components/pagination/Pagination';
 import type { Category } from '../models/category';
 import useCategoryListing from '../hooks/useCategoryListing';
-//import type { PagedResult } from '../../../../common/models/results/paged-result';
-//import type { QueryParams } from '../../../../common/models/searching/query-params';
 
-const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
-//const defaultPageSize = 10;
 type CategoriesListingProps = {
     onNewCategoryClick?: () => void;
 };
