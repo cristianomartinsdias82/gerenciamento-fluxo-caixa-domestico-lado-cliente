@@ -11,7 +11,7 @@ const mountQueryParams = (query: QueryParams) => `pageNumber=${query.pageNumber}
 const useCategoryListing = (deps?: any) => {
 
     const [pagedResult, setPagedResult] = useState<PagedResult<Category> | undefined>(undefined);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState<Error | undefined>(undefined);
     const [loading, setLoading] = useState<boolean>(false);
     const [queryParams, setQueryParams] = useState<QueryParams>({ pageNumber : 1, pageSize : 10, searchTerm: null });
     const [hasMultiplePages, setHasMultiplePages] = useState<boolean>((pagedResult?.pageCount || 0) > 1);
@@ -32,6 +32,7 @@ const useCategoryListing = (deps?: any) => {
 
                 setPagedResult(result);
                 setHasMultiplePages(result.pageCount > 1);
+
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             } catch (error: any) {
 
@@ -40,7 +41,9 @@ const useCategoryListing = (deps?: any) => {
                 setError(error);
 
             } finally {
+
                 setLoading(false);
+                
             }
         }
 
@@ -62,13 +65,32 @@ const useCategoryListing = (deps?: any) => {
         }
     }, [queryParams, deps]);
 
+    const removeCategory = async (id: string) => {
+
+        setLoading(true);
+        
+        try {
+            const response = await fetch(
+                `${apiBaseUrl}/categories/${id}`,
+                { method : 'DELETE'});
+    
+            if (response.ok) setQueryParams({...queryParams, pageNumber: 1});
+            else setError(new Error(response.statusText));
+        } catch (error) {
+            console.error('Error removing category:', error);
+        } finally {
+            setLoading(false);
+        }
+    }
+
     return {
         pagedResult,
         queryParams,
-        error,
-        loading,
+        setQueryParams,
         hasMultiplePages,
-        setQueryParams
+        loading,
+        error,
+        removeCategory
     };
 }
 

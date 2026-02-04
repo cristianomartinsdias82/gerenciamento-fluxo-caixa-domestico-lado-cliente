@@ -18,15 +18,14 @@ const autoFocus = (element: HTMLInputElement) => element?.focus();
 const CategoriesListing = ({ onNewCategoryClick }: CategoriesListingProps) => {
 
     const [searchInput, setSearchInput] = useState<string>('');
-    const [removeError, setRemoveError] = useState(null);
-
     const {
         queryParams,
         setQueryParams,
         pagedResult,
         hasMultiplePages,
         loading,
-        error
+        error,
+        removeCategory
     } = useCategoryListing();
 
     const noItemsMessage = searchInput.length > 0 ? "The search returned no results." : "No people registered just yet!";
@@ -35,20 +34,6 @@ const CategoriesListing = ({ onNewCategoryClick }: CategoriesListingProps) => {
         if (!window.confirm(`Are you sure you want to remove '${category.name}'?`)) return;
 
         await removeCategory(category.id);
-    }
-
-    //TODO: move the implementation to useCategoriesListing hook
-    const removeCategory = async (id: string) => {
-        try {
-            const response = await fetch(
-                `${apiBaseUrl}/categories/${id}`,
-                { method : 'DELETE'});
-
-            if (response.ok) setQueryParams({...queryParams, pageNumber: 1});
-            else setRemoveError(new Error(response.statusText));
-        } catch (error) {
-            console.error('Error removing category:', error);
-        }
     }
 
     const handlePageChange = (pageNumber: number) => {
@@ -63,7 +48,6 @@ const CategoriesListing = ({ onNewCategoryClick }: CategoriesListingProps) => {
 
     if (loading) return <div>Loading. Please wait...</div>;
     if (error) return <div>Error: {error.message}</div>;
-    if (removeError) return <div>Error: {removeError.message}</div>;
 
     return (
         <div className="categories-listing-container">
