@@ -27,8 +27,10 @@ const usePeopleListing = (deps?: any) => {
 
             try {
 
-                const response = await fetch(`${apiBaseUrl}/people?${(mountQueryParams(queryParams))}`);
+                const response = await fetch(`${apiBaseUrl}/people?${(mountQueryParams(queryParams))}`,
+                                             { signal : abortController.signal });
                 const result = await response.json() as PagedResult<Person>;
+                
                 setPagedResult(result);
                 setHasMultiplePages(result.pageCount > 1);
 
@@ -70,7 +72,7 @@ const usePeopleListing = (deps?: any) => {
 
         try {
             const response = await fetch(
-                `${import.meta.env.VITE_API_BASE_URL}/people/${id}`,
+                `${apiBaseUrl}/people/${id}`,
                 { method : 'DELETE'});
 
             if (response.ok) setQueryParams({...queryParams, pageNumber: 1});
