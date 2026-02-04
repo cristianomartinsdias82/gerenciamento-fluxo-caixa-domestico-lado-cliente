@@ -1,58 +1,35 @@
-import { useEffect, useState, type ChangeEvent } from 'react';
+import { /*useEffect, useState,*/ useState, type ChangeEvent } from 'react';
 import './CategoriesListing.css';
 import Pagination from '../../../../common/components/pagination/Pagination';
 import type { Category } from '../models/category';
-import type { PagedResult } from '../../../../common/models/results/paged-result';
-import type { QueryParams } from '../../../../common/models/searching/query-params';
+import useCategoryListing from '../hooks/useCategoryListing';
+//import type { PagedResult } from '../../../../common/models/results/paged-result';
+//import type { QueryParams } from '../../../../common/models/searching/query-params';
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
-const defaultPageSize = 10;
+//const defaultPageSize = 10;
 type CategoriesListingProps = {
     onNewCategoryClick?: () => void;
 };
 
+//https://tigeroakes.com/posts/react-focus-on-render/
+const autoFocus = (element: HTMLInputElement) => element?.focus();
+
 const CategoriesListing = ({ onNewCategoryClick }: CategoriesListingProps) => {
 
-    const [pagedResult, setPagedResult] = useState<PagedResult<Category> | null>(null);
-    const [queryParams, setQueryParams] = useState<QueryParams>({ pageNumber: 1, pageSize: defaultPageSize });
-    const [loading, setLoading] = useState<boolean>(true);
-    const [error, setError] = useState<Error | null>(null);
     const [searchInput, setSearchInput] = useState<string>('');
-    const hasPagination = (pagedResult?.pageCount ?? 0) > 1;
+    const [removeError, setRemoveError] = useState(null);
 
-    useEffect(() => {
+    const {
+        queryParams,
+        setQueryParams,
+        pagedResult,
+        hasMultiplePages,
+        loading,
+        error
+    } = useCategoryListing();
 
-        const abortController = new AbortController();
-
-        const fetchCategoriesList = async () => {
-
-            try {
-                const response = await fetch(
-                    `${apiBaseUrl}/categories?pageNumber=${queryParams.pageNumber}&pageSize=${queryParams.pageSize}&searchTerm=${encodeURIComponent(searchInput)}`,
-                    { signal: abortController.signal });
-                
-                const pagedResult = await response.json() as PagedResult<Category>;
-
-                setPagedResult(pagedResult);
-            } catch (error: unknown) {
-                if (error.name === 'AbortError') return;
-
-                setError(error as Error);
-                console.error('Error fetching Categories list:', error);
-            } finally {
-                setLoading(false);
-            }
-        }
-
-        const searchTID = setTimeout(() => {
-            fetchCategoriesList();
-        }, 700);
-
-        return () => {
-            clearTimeout(searchTID);
-            abortController.abort();
-        };
-    }, [queryParams, searchInput]);
+    const noItemsMessage = searchInput.length > 0 ? "The search returned no results." : "No people registered just yet!";
 
     const handleRemove = async (category: Category) => {
         if (!window.confirm(`Are you sure you want to remove '${category.name}'?`)) return;
@@ -60,21 +37,21 @@ const CategoriesListing = ({ onNewCategoryClick }: CategoriesListingProps) => {
         await removeCategory(category.id);
     }
 
+    //TODO: move the implementation to useCategoriesListing hook
     const removeCategory = async (id: string) => {
         try {
-                const response = await fetch(
+            const response = await fetch(
                 `${apiBaseUrl}/categories/${id}`,
                 { method : 'DELETE'});
 
             if (response.ok) setQueryParams({...queryParams, pageNumber: 1});
-            else setError(new Error(response.statusText));
+            else setRemoveError(new Error(response.statusText));
         } catch (error) {
             console.error('Error removing category:', error);
         }
     }
 
     const handlePageChange = (pageNumber: number) => {
-        setLoading(true);
         setQueryParams({...queryParams, pageNumber});
     }
 
@@ -86,11 +63,13 @@ const CategoriesListing = ({ onNewCategoryClick }: CategoriesListingProps) => {
 
     if (loading) return <div>Loading. Please wait...</div>;
     if (error) return <div>Error: {error.message}</div>;
+    if (removeError) return <div>Error: {removeError.message}</div>;
 
     return (
         <div className="categories-listing-container">
             <button type="button" onClick={() => { onNewCategoryClick?.() }}>New category</button>
-            <input type="text" placeholder="Search by name" value={searchInput} onChange={handleSearchChange} />
+            <input type="text" ref={autoFocus} placeholder="Search by name" value={searchInput} onChange={handleSearchChange} />
+            {!pagedResult || pagedResult.itemCount === 0 && <p>{noItemsMessage}</p>}
             {(pagedResult && pagedResult.itemCount > 0) &&
             <table className="categories-listing">
                 <thead>
@@ -115,7 +94,7 @@ const CategoriesListing = ({ onNewCategoryClick }: CategoriesListingProps) => {
                     </tr>
                 </tfoot>
             </table>}
-            {hasPagination &&
+            {hasMultiplePages &&
              <Pagination paginationParams={{
                          pageNumber: pagedResult!.queryParams.pageNumber,
                          pageSize: pagedResult!.queryParams.pageSize,
